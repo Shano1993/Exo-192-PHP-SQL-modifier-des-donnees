@@ -10,9 +10,48 @@
 
 // TODO Votre code ici.
 try {
-    ...
+    $server = 'localhost';
+    $user = 'root';
+    $password = '';
+    $db = 'exo192';
+
+    $pdo = new PDO("mysql:host=$server;dbname=$db", $user, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $stm1 = $pdo->prepare("
+    INSERT INTO user (nom, prenom, rue, numero, code_postal, ville, pays, mail)
+    VALUES (:nom, :prenom, :rue, :numero, :code_postal, :ville, :pays, :mail)
+    ");
+
+    $stm1->execute([
+    ':nom' => 'Haricot',
+    ':prenom' => 'Stefan',
+    ':rue' => 'Ma Rue',
+    ':numero' => 56,
+    ':code_postal' => 6470,
+    ':ville' => 'Monceau',
+    ':pays' => 'Belgique',
+    ':mail' => 'monsupermail@hotmail.com',
+    ]);
+
+    $stm2 = $pdo->prepare("
+        UPDATE user SET nom = :nom WHERE id = :id
+    ");
+
+    $nom = 'Hanotiau';
+    $id = 6;
+
+    $stm2->bindParam(':nom', $nom);
+    $stm2->bindParam(':id', $id);
+
+    $stm2->execute();
+
+    echo 'Utilisateur ajouté';
 }
-catch...
+
+catch (Exception $exception) {
+    echo $exception->getMessage();
+}
 
 
 
